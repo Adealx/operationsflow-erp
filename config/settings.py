@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-9ea&8$756x05oz88t*#xs0e%+n+x2!+r=%e*jb)yeqd@5%bo@-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'operationsflow-erp.onrender.com',
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition
