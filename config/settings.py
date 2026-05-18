@@ -125,3 +125,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+import os
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser(
+        'admin',
+        'admin@example.com',
+        'admin123'
+    )
