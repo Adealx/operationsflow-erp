@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Operations Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-5">FMCG Operations Dashboard</h1>
+
+    <div class="text-center mb-4">
+        <a href="/workflow/orders/" class="btn btn-primary me-2">View Orders</a>
+        <a href="/workflow/create/" class="btn btn-success me-2">Create Order</a>
+        <a href="/admin/" class="btn btn-dark">Admin Panel</a>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow">
+                <h5>Employees</h5>
+                <h2>{{ employee_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow">
+                <h5>Overdue Tasks</h5>
+                <h2>{{ overdue_tasks }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow">
+                <h5>Low Stock</h5>
+                <h2>{{ low_stock }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow">
+                <h5>Delayed Deliveries</h5>
+                <h2>{{ delayed_deliveries }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <canvas id="taskChart"></canvas>
+        </div>
+
+        <div class="col-md-6">
+            <canvas id="deliveryChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow">
+                <h5>Total Orders</h5>
+                <h2>{{ total_orders }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow bg-danger text-white">
+                <h5>Delayed Orders</h5>
+                <h2>{{ delayed_orders }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow bg-success text-white">
+                <h5>Dispatched</h5>
+                <h2>{{ dispatched_orders }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow bg-warning">
+                <h5>Pending Orders</h5>
+                <h2>{{ pending_orders }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <canvas id="orderChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+new Chart(document.getElementById('taskChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Pending', 'Completed'],
+        datasets: [{
+            label: 'Tasks',
+            data: [{{ pending_tasks }}, {{ completed_tasks }}]
+        }]
+    }
+});
+
+new Chart(document.getElementById('deliveryChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Delayed', 'Delivered'],
+        datasets: [{
+            data: [{{ delayed_deliveries }}, {{ delivered }}]
+        }]
+    }
+});
+
+new Chart(document.getElementById('orderChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Pending', 'Delayed', 'Dispatched'],
+        datasets: [{
+            label: 'Order Analytics',
+            data: [
+                {{ pending_orders }},
+                {{ delayed_orders }},
+                {{ dispatched_orders }}
+            ]
+        }]
+    }
+});
+</script>
+
+<footer class="text-center mt-5 mb-3 text-muted">
+    <hr>
+    <p><strong>TOCHAMS OperationsFlow ERP</strong> | Built by REXILLON</p>
+    <p>FMCG Workflow & Accounts Operations Management System</p>
+</footer>
+
+</body>
+</html>

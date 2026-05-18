@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Orders</title>
+    <style>
+        .badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .submitted { background: gray; }
+        .accounts { background: blue; }
+        .management { background: purple; }
+        .warehouse { background: orange; }
+        .dispatched { background: green; }
+
+        .low { background: green; }
+        .medium { background: blue; }
+        .high { background: orange; }
+        .urgent { background: red; }
+
+        .delayed {
+            background: red;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        a {
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Customer Orders</h1>
+
+<a href="/workflow/create/">Create New Order</a>
+
+<br><br>
+
+<form method="GET">
+    <input type="text" name="q" placeholder="Search customer">
+
+    <select name="status">
+        <option value="">All Statuses</option>
+        <option value="submitted">Submitted</option>
+        <option value="accounts_approved">Accounts Approved</option>
+        <option value="management_approved">Management Approved</option>
+        <option value="warehouse_processing">Warehouse Processing</option>
+        <option value="dispatched">Dispatched</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<br><br>
+
+<table>
+    <tr>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Priority</th>
+        <th>Created</th>
+        <th>Delay Status</th>
+        <th>Status</th>
+        <th>Department Action</th>
+    </tr>
+
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.customer_name }}</td>
+        <td>{{ order.product }}</td>
+        <td>{{ order.quantity }}</td>
+
+        <td>
+            <span class="badge {{ order.priority }}">
+                {{ order.priority }}
+            </span>
+        </td>
+
+        <td>{{ order.created_at }}</td>
+
+        <td>
+            {% if order.is_delayed %}
+                <span class="delayed">Delayed</span>
+            {% else %}
+                On Time
+            {% endif %}
+        </td>
+
+        <td>
+            {% if order.status == 'submitted' %}
+                <span class="badge submitted">Submitted</span>
+            {% elif order.status == 'accounts_approved' %}
+                <span class="badge accounts">Accounts Approved</span>
+            {% elif order.status == 'management_approved' %}
+                <span class="badge management">Management Approved</span>
+            {% elif order.status == 'warehouse_processing' %}
+                <span class="badge warehouse">Warehouse Processing</span>
+            {% elif order.status == 'dispatched' %}
+                <span class="badge dispatched">Dispatched</span>
+            {% endif %}
+        </td>
+
+        <td>
+            {% if order.status != 'dispatched' %}
+                <a href="/workflow/approve/{{ order.id }}/">
+                    {% if order.status == 'submitted' %}
+                        Accounts Approval
+                    {% elif order.status == 'accounts_approved' %}
+                        Management Approval
+                    {% elif order.status == 'management_approved' %}
+                        Warehouse Processing
+                    {% elif order.status == 'warehouse_processing' %}
+                        Dispatch Order
+                    {% endif %}
+                </a>
+            {% else %}
+                Completed
+            {% endif %}
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
